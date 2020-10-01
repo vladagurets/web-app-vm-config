@@ -1,37 +1,58 @@
-# Requirements for env (CentOS)
+## Decription
+This repo helps you with VM configuration for web applications. At the end your VM well be able to perform CI/CD.
 
-#### nstall some tools
-```yum install git```
-```yum install wget```
-```yum install docker```
-```service docker start```
+## Note
+Manual for CentOS. Use similar steps fro other unix OSs.
 
-#### Install Go...
+## Requrements
+- Unix OS
+- Your repo must have Dockerfile
+- VM instance
 
-```wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz```
-```tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz```
-```echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bash_profile```
-```source ~/.bash_profile```
+## Capabilities
+- Isolated Docker containers
+- Webhooks (watching new commits)
+- Autodeployment
 
-#### ...and install webhooks through snapcraft...
+## Preparations
 
-```yum install epel-release```
-```yum install snapd```
-```systemctl enable --now snapd.socket```
-```sudo ln -s /var/lib/snapd/snap /snap```
-```sudo snap install webhook```
+1. #### Install some tools
+- ```yum install git```
+- ```yum install wget```
+- ```yum install docker```
 
-#### ...and configure deployment webhook (don't worget to create webhook on GitHub)
+2. #### Install Go...
+- ```wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz```
+- ```tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz```
+- ```echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bash_profile```
+- ```source ~/.bash_profile```
 
-copy content of *build_assets* folder to */root*
-Don't forget to add executable permissions to scripts
-```chmod +x ~/init.sh```
-```chmod +x ~/deploy.sh```
+3. #### ...and install webhooks through snapcraft...
+- ```yum install epel-release```
+- ```yum install snapd```
+- ```systemctl enable --now snapd.socket```
+- ```sudo ln -s /var/lib/snapd/snap /snap```
+- ```sudo snap install webhook```
 
-Don't forget to add server ssh key to GitHub
+4. #### ...and configure deployment webhook (don't worget to create webhook on GitHub)
+5. #### Copy content of this repo (*deploy.sh*, *init.sh*, *hooks.json*) to */root* directory of your VM
+6. #### Don't forget to add executable permissions to scripts
+- ```chmod +x ~/init.sh```
+- ```chmod +x ~/deploy.sh```
 
-```sh ~/init.sh```
-```/var/lib/snapd/snap/webhook/4/bin/webhook -hooks /root/hooks.json -verbose```
+7. #### Start webhook http server
+- ```/var/lib/snapd/snap/webhook/4/bin/webhook -hooks /root/hooks.json -verbose```
+
+8. #### Start Docker service
+- ```service docker start```
+
+9. #### Configure Github
+- Generate ssh key ```ssh-keygen```
+- Copy key and add to GitHub (or another cloud repo) ```cat ~/.ssh/id_rsa.pub```
+- Configure webhooks https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/creating-webhooks
+
+10. #### Run init script
+- ```sh ~/init.sh```
 
 
 
