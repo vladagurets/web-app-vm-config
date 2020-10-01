@@ -1,0 +1,21 @@
+[
+  {
+    "id": "deploy",
+    "execute-command": "/root/deploy.sh",
+    "command-working-directory": "/root",
+    "pass-arguments-to-command": [
+      {
+        "source": "payload",
+        "name": "head_commit.id"
+      },
+      {
+        "source": "payload",
+        "name": "pusher.name"
+      },
+      {
+        "source": "payload",
+        "name": "pusher.email"
+      }
+    ]
+  }
+]
